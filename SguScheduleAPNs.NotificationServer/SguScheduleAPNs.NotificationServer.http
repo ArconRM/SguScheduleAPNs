@@ -1,0 +1,6 @@
+@SguScheduleAPNs.NotificationServer_HostAddress = http://localhost:5049
+
+GET {{SguScheduleAPNs.NotificationServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,9 @@
+using Core.BaseEntities.Interfaces;
+using SguScheduleAPNs.DevicesManager.Entities;
+
+namespace SguScheduleAPNs.DevicesManager.Repository.Interfaces;
+
+public interface IDeviceRepository : IRepository<Device>
+{
+    Task<Device> GetDeviceByTokenAsync(string apnsToken, CancellationToken token);
+}

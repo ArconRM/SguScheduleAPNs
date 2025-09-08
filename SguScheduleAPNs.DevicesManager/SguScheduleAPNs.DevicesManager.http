@@ -1,0 +1,6 @@
+@SguScheduleAPNs.DevicesManager_HostAddress = http://localhost:5001
+
+GET {{SguScheduleAPNs.DevicesManager_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

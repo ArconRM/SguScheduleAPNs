@@ -1,0 +1,28 @@
+﻿services:
+  sguscheduleapns.devicesmanager:
+    image: sguscheduleapns.devicesmanager
+    build:
+      context: .
+      dockerfile: SguScheduleAPNs.DevicesManager/Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=DeviceManagerDatabase;Username=scheduleuser;Password=qWbYhFF6
+      - ASPNETCORE_URLS=http://+:5341
+    ports:
+      - "5341:5341"
+    depends_on:
+      - db
+      
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: DeviceManagerDatabase
+      POSTGRES_USER: scheduleuser
+      POSTGRES_PASSWORD: qWbYhFF6
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    ports:
+      - "5433:5432"
+
+volumes:
+  postgres_data:
