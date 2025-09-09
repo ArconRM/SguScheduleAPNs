@@ -5,9 +5,9 @@
       context: .
       dockerfile: SguScheduleAPNs.DevicesManager/Dockerfile
     environment:
-      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=DeviceManagerDatabase;Username=scheduleuser;Password=qWbYhFF6
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
       - ASPNETCORE_URLS=https://+:5341;http://+:5340
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=YourCertPassword
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERT_PASSWORD}
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     ports:
       - "5341:5341"
@@ -20,9 +20,9 @@
   db:
     image: postgres:16
     environment:
-      POSTGRES_DB: DeviceManagerDatabase
-      POSTGRES_USER: scheduleuser
-      POSTGRES_PASSWORD: qWbYhFF6
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres-init:/docker-entrypoint-initdb.d

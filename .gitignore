@@ -6,3 +6,10 @@ riderModule.iml
 /SguScheduleAPNs.NotificationServer/Certificates
 .idea/
 .DS_Store
+.env
+
+https/
+*.pfx
+*.crt
+*.key
+*.pem
