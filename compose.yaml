@@ -1,25 +1,4 @@
 ﻿services:
-  traefik:
-    image: traefik:v3.0
-    command:
-      - "--api.dashboard=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.letsencrypt.acme.email=your-email@example.com"
-      - "--certificatesresolvers.letsencrypt.acme.storage=/acme.json"
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"  # Traefik dashboard
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./acme.json:/acme.json
-    networks:
-      - app-network
-
   sguscheduleapns.devicesmanager:
     image: sguscheduleapns.devicesmanager
     build:
@@ -27,23 +6,16 @@
       dockerfile: SguScheduleAPNs.DevicesManager/Dockerfile
     environment:
       - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=DeviceManagerDatabase;Username=scheduleuser;Password=qWbYhFF6
-      - ASPNETCORE_URLS=http://+:5341
-    expose:
-      - "5341"
+      - ASPNETCORE_URLS=https://+:5341;http://+:5340
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=YourCertPassword
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:
+      - "5341:5341"
+      - "5340:5340"
+    volumes:
+      - ./https:/https:ro
     depends_on:
       - db
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`your-domain.com`)"
-      - "traefik.http.routers.app.entrypoints=websecure"
-      - "traefik.http.routers.app.tls.certresolver=letsencrypt"
-      - "traefik.http.services.app.loadbalancer.server.port=5341"
-      - "traefik.http.routers.app-http.rule=Host(`your-domain.com`)"
-      - "traefik.http.routers.app-http.entrypoints=web"
-      - "traefik.http.routers.app-http.middlewares=redirect-to-https"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-    networks:
-      - app-network
 
   db:
     image: postgres:16
@@ -56,12 +28,6 @@
       - ./postgres-init:/docker-entrypoint-initdb.d
     ports:
       - "5433:5432"
-    networks:
-      - app-network
 
 volumes:
   postgres_data:
-
-networks:
-  app-network:
-    driver: bridge
