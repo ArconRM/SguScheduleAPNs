@@ -9,6 +9,7 @@ namespace SguScheduleAPNs.NotificationServer.Service;
 public class NotificationBackgroundService : BackgroundService
 {
     private readonly string _dataPath;
+    private readonly Random _random;
     private readonly ILogger<NotificationBackgroundService> _logger;
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly IDeviceManagerHttpService _deviceManagerHttpService;
@@ -22,6 +23,7 @@ public class NotificationBackgroundService : BackgroundService
         IParsingHttpService parsingHttpService)
     {
         _dataPath = options.Value.DataPath;
+        _random = new Random();
         _logger = logger;
         _serviceScopeFactory = serviceScopeFactory;
         _deviceManagerHttpService = deviceManagerHttpService;
@@ -37,7 +39,7 @@ public class NotificationBackgroundService : BackgroundService
                 await ProcessNotifications(token);
             }
             
-            await Task.Delay(TimeSpan.FromMinutes(10), token);
+            await Task.Delay(TimeSpan.FromMinutes(_random.Next(15, 35)), token);
         }
     }
 

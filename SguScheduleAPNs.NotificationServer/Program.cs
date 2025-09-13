@@ -23,7 +23,12 @@ builder.Services.Configure<ParsingServiceOptions>(
 builder.Services.Configure<ApnsServiceOptions> ( options =>
 {
     options.BundleId = Environment.GetEnvironmentVariable("APNS_BUNDLE_ID");
-    options.CertificatePath = Environment.GetEnvironmentVariable("APNS_KEY_PATH");
+    
+    if (builder.Environment.IsDevelopment())
+        options.CertificatePath = Environment.GetEnvironmentVariable("APNS_KEY_PATH");
+    else
+        options.CertificatePath = Environment.GetEnvironmentVariable("APNS_KEY_PROD_PATH");
+    
     options.KeyId = Environment.GetEnvironmentVariable("APNS_KEY_ID");
     options.TeamId = Environment.GetEnvironmentVariable("APNS_TEAM_ID");
 });
