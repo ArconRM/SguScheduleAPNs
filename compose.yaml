@@ -1,6 +1,6 @@
 ﻿services:
-  sguscheduleapns.devicesmanager:
-    image: sguscheduleapns.devicesmanager
+  devicesmanager:
+    image: devicesmanager
     build:
       context: .
       dockerfile: SguScheduleAPNs.DevicesManager/Dockerfile
@@ -17,8 +17,8 @@
     depends_on:
       - db
   
-  sguscheduleapns.notificationserver:
-    image: sguscheduleapns.notificationserver
+  notificationserver:
+    image: notificationserver
     build:
       context: .
       dockerfile: SguScheduleAPNs.NotificationServer/Dockerfile
