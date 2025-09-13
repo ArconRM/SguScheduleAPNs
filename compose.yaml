@@ -29,8 +29,10 @@
       - APNS_KEY_PATH=${APNS_KEY_PATH}
       - APNS_KEY_PROD_PATH=${APNS_KEY_PROD_PATH}
       - DEVICE_MANAGER_BASE_ADDRESS=${DEVICE_MANAGER_BASE_ADDRESS}
+      - ASPNETCORE_URLS=http://+:5441;https://+:5442
     ports:
       - "5441:5441"
+      - "5442:5442"
 
   db:
     image: postgres:16
