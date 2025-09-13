@@ -2,7 +2,7 @@ namespace SguScheduleAPNs.DevicesManager.DTO;
 
 public class DeviceRegisterRequest
 {
-    public string apnsToken { get; set; }
+    public string ApnsToken { get; set; }
 
     public string Model { get; set; }
 

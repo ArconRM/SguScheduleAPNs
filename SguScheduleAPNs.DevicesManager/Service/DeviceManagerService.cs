@@ -23,7 +23,7 @@ public class DeviceManagerService: IDeviceManagerService
     {
         var device = new Device
         {
-            ApnsToken = request.apnsToken,
+            ApnsToken = request.ApnsToken,
             Model = request.Model,
             SystemVersion = request.SystemVersion,
             FavouriteGroupDepartment = request.FavouriteGroupDepartment,
