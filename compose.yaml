@@ -16,6 +16,20 @@
       - ./https:/https:ro
     depends_on:
       - db
+  
+  sguscheduleapns.notificationserver:
+    image: sguscheduleapns.notificationserver
+    build:
+      context: .
+      dockerfile: SguScheduleAPNs.NotificationServer/Dockerfile
+    environment:
+      - APNS_KEY_ID=${APNS_KEY_ID}
+      - APNS_TEAM_ID=${APNS_TEAM_ID}
+      - APNS_BUNDLE_ID=${APNS_BUNDLE_ID}
+      - APNS_KEY_PATH=${APNS_KEY_PATH}
+      - DEVICE_MANAGER_BASE_ADDRESS=${DEVICE_MANAGER_BASE_ADDRESS}
+    ports:
+      - "5441:5441"
 
   db:
     image: postgres:16

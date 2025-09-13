@@ -11,7 +11,7 @@ COPY ["Core/", "Core/"]
 
 RUN dotnet publish "SguScheduleAPNs.NotificationServer/SguScheduleAPNs.NotificationServer.csproj" -c Release -o /app/publish --no-restore
 
-FROM build AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 
 WORKDIR /app
 COPY --from=build /app/publish .
