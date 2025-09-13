@@ -1,5 +1,5 @@
+using Core.Entities;
 using SguScheduleAPNs.DevicesManager.DTO;
-using SguScheduleAPNs.DevicesManager.Entities;
 using SguScheduleAPNs.DevicesManager.Repository.Interfaces;
 using SguScheduleAPNs.DevicesManager.Service.Interfaces;
 
@@ -40,5 +40,11 @@ public class DeviceManagerService: IDeviceManagerService
         device.FavouriteGroupDepartment = request.FavouriteGroupDepartment;
         device.FavouriteGroupNumber = request.FavouriteGroupNumber;
         await _repository.UpdateAsync(device, token);
+    }
+
+    public async Task UnregisterDeviceAsync(string apnsToken, CancellationToken token)
+    {
+        var device = await _repository.GetDeviceByTokenAsync(apnsToken, token);
+        await _repository.DeleteAsync(device.Uuid, token);
     }
 }

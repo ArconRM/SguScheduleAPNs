@@ -1,6 +1,6 @@
 using Core.BaseEntities.Interfaces;
 
-namespace SguScheduleAPNs.DevicesManager.Entities;
+namespace Core.Entities;
 
 public class Device: IEntity
 {

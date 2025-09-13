@@ -1,6 +1,6 @@
+using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SguScheduleAPNs.DevicesManager.Entities;
 
 namespace SguScheduleAPNs.DevicesManager.Repository.EntityConfiguration;
 

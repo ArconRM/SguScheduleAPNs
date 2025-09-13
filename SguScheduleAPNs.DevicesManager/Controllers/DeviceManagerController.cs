@@ -40,6 +40,7 @@ public class DeviceManagerController : ControllerBase
         try
         {
             var registeredDeviceGuid = await _deviceManagerService.RegisterDeviceAsync(request, token);
+            _logger.LogInformation($"Registered new device with guid: {registeredDeviceGuid}");
             return Ok(registeredDeviceGuid);
         }
         catch (Exception ex)
@@ -55,6 +56,23 @@ public class DeviceManagerController : ControllerBase
         try
         {
             await _deviceManagerService.UpdateFavouriteGroupAsync(request, token);
+            _logger.LogInformation($"Updated favourite group on device with token: {request.apnsToken}");
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return BadRequest();
+        }
+    }
+
+    [HttpPost(nameof(UnregisterDevice))]
+    public async Task<IActionResult> UnregisterDevice(string apnsToken, CancellationToken token)
+    {
+        try
+        {
+            await _deviceManagerService.UnregisterDeviceAsync(apnsToken, token);
+            _logger.LogInformation($"Unregistered device with token: {apnsToken}");
             return Ok();
         }
         catch (Exception ex)

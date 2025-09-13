@@ -1,5 +1,5 @@
 using Core.BaseEntities.Interfaces;
-using SguScheduleAPNs.DevicesManager.Entities;
+using Core.Entities;
 
 namespace SguScheduleAPNs.DevicesManager.Repository.Interfaces;
 

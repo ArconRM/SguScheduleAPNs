@@ -1,5 +1,5 @@
+using Core.Entities;
 using SguScheduleAPNs.DevicesManager.DTO;
-using SguScheduleAPNs.DevicesManager.Entities;
 
 namespace SguScheduleAPNs.DevicesManager.Service.Interfaces;
 
@@ -10,4 +10,6 @@ public interface IDeviceManagerService
     Task<Guid> RegisterDeviceAsync(DeviceRegisterRequest request, CancellationToken token);
     
     Task UpdateFavouriteGroupAsync(FavouriteGroupUpdateRequest request, CancellationToken token);
+
+    Task UnregisterDeviceAsync(string apnsToken, CancellationToken token);
 }

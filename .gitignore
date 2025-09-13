@@ -3,10 +3,11 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
-/SguScheduleAPNs.NotificationServer/Certificates
+/SguScheduleAPNs.NotificationServer/Secrets
+/SguScheduleAPNs.NotificationServer/Data
 .idea/
 .DS_Store
-.env
+*.env
 
 https/
 *.pfx
