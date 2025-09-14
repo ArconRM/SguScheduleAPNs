@@ -33,6 +33,9 @@
     ports:
       - "5441:5441"
       - "5442:5442"
+    volumes:
+      - ./SguScheduleAPNs.NotificationServer/Secrets:/secrets:ro
+      - ./SguScheduleAPNs.NotificationServer/Data:/data
 
   db:
     image: postgres:16
