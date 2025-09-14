@@ -14,9 +14,9 @@ public class DeviceRepository: BaseRepository<Device>, IDeviceRepository
         _context = context;
     }
 
-    public async Task<Device> GetDeviceByTokenAsync(string apnsToken, CancellationToken token)
+    public async Task<Device?> GetDeviceByTokenAsync(string apnsToken, CancellationToken token)
     {
         var set = _context.Set<Device>();
-        return await set.AsNoTracking().Where(d => d.ApnsToken == apnsToken).FirstAsync(token);
+        return await set.AsNoTracking().Where(d => d.ApnsToken == apnsToken).FirstOrDefaultAsync(token);
     }
 }

@@ -56,7 +56,7 @@ public class DeviceManagerController : ControllerBase
         try
         {
             await _deviceManagerService.UpdateFavouriteGroupAsync(request, token);
-            _logger.LogInformation($"Updated favourite group on device with token: {request.apnsToken}");
+            _logger.LogInformation($"Updated favourite group on device with token: {request.ApnsToken}");
             return Ok();
         }
         catch (Exception ex)

@@ -5,5 +5,5 @@ namespace SguScheduleAPNs.DevicesManager.Repository.Interfaces;
 
 public interface IDeviceRepository : IRepository<Device>
 {
-    Task<Device> GetDeviceByTokenAsync(string apnsToken, CancellationToken token);
+    Task<Device?> GetDeviceByTokenAsync(string apnsToken, CancellationToken token);
 }

@@ -21,6 +21,10 @@ public class DeviceManagerService: IDeviceManagerService
     
     public async Task<Guid> RegisterDeviceAsync(DeviceRegisterRequest request, CancellationToken token)
     {
+        var existingDevice = await _repository.GetDeviceByTokenAsync(request.ApnsToken, token);
+        if (existingDevice is not null)
+            return existingDevice.Uuid;
+        
         var device = new Device
         {
             ApnsToken = request.ApnsToken,
@@ -36,7 +40,7 @@ public class DeviceManagerService: IDeviceManagerService
     
     public async Task UpdateFavouriteGroupAsync(FavouriteGroupUpdateRequest request, CancellationToken token)
     {
-        var device = await _repository.GetDeviceByTokenAsync(request.apnsToken, token);
+        var device = await _repository.GetDeviceByTokenAsync(request.ApnsToken, token);
         device.FavouriteGroupDepartment = request.FavouriteGroupDepartment;
         device.FavouriteGroupNumber = request.FavouriteGroupNumber;
         await _repository.UpdateAsync(device, token);
