@@ -37,8 +37,9 @@ public class ApnsService : IApnsService
 
         var push = new ApplePush(ApplePushType.Alert)
             .AddAlert(title, body)
-            .AddToken(token)
-            .SendToDevelopmentServer();
+            .AddToken(token);
+            
+            // .SendToDevelopmentServer();
 
         try
         {

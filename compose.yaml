@@ -22,7 +22,6 @@
       context: .
       dockerfile: SguScheduleAPNs.NotificationServer/Dockerfile
     environment:
-      - APNS_KEY_ID=${APNS_KEY_ID}
       - APNS_TEAM_ID=${APNS_TEAM_ID}
       - APNS_BUNDLE_ID=${APNS_BUNDLE_ID}
       - APNS_KEY_PATH=${APNS_KEY_PATH}
