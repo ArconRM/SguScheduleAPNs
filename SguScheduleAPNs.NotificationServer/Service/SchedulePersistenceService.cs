@@ -12,6 +12,7 @@ namespace SguScheduleAPNs.NotificationServer.Service;
 public class SchedulePersistenceService : ISchedulePersistenceService
 {
     private readonly string _dataPath;
+    private readonly string _dataHistoryPath;
     private readonly ILogger<SchedulePersistenceService> _logger;
     private readonly JsonSerializerOptions _jsonOptions;
 
@@ -20,8 +21,10 @@ public class SchedulePersistenceService : ISchedulePersistenceService
         ILogger<SchedulePersistenceService> logger)
     {
         _dataPath = options.Value.DataPath;
+        _dataHistoryPath = Path.Combine(_dataPath, "History");
         _logger = logger;
         Directory.CreateDirectory(_dataPath);
+        Directory.CreateDirectory(_dataHistoryPath);
 
         _jsonOptions = new JsonSerializerOptions
         {
@@ -32,7 +35,9 @@ public class SchedulePersistenceService : ISchedulePersistenceService
         };
     }
 
-    public async Task<List<Lesson>?> LoadScheduleAsync(string groupKey, CancellationToken token)
+    public async Task<List<Lesson>?> LoadScheduleAsync(
+        string groupKey,
+        CancellationToken token)
     {
         var file = GetFilePath(groupKey);
         if (!File.Exists(file))
@@ -50,7 +55,10 @@ public class SchedulePersistenceService : ISchedulePersistenceService
         }
     }
 
-    public async Task SaveScheduleAsync(string groupKey, List<Lesson> lessons, CancellationToken token)
+    public async Task SaveScheduleAsync(
+        string groupKey,
+        List<Lesson> lessons,
+        CancellationToken token)
     {
         var file = GetFilePath(groupKey);
         try
@@ -65,7 +73,38 @@ public class SchedulePersistenceService : ISchedulePersistenceService
         }
     }
 
-    public async Task<bool> HasScheduleChangedAsync(string groupKey, List<Lesson> newLessons, CancellationToken token)
+    public async Task SaveScheduleWithArchivingOldVersionAsync(
+        string groupKey,
+        List<Lesson> lessons,
+        CancellationToken token)
+    {
+        var file = GetFilePath(groupKey);
+        try
+        {
+            if (File.Exists(file))
+            {
+                var oldJson = await File.ReadAllTextAsync(file, token);
+                if (!string.IsNullOrEmpty(oldJson))
+                {
+                    var historyFile = GetFilePath($"{groupKey}_{DateTime.UtcNow:yyyy-MM-dd_HH-mm-ss}", isHistory: true);
+                    await File.WriteAllTextAsync(historyFile, oldJson, token);
+                }
+            }
+
+            var json = JsonSerializer.Serialize(lessons, _jsonOptions);
+            await File.WriteAllTextAsync(file, json, token);
+            _logger.LogInformation("Saved schedule for group {Group}", groupKey);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to save schedule for group {Group}", groupKey);
+        }
+    }
+
+    public async Task<bool> HasScheduleChangedAsync(
+        string groupKey,
+        List<Lesson> newLessons,
+        CancellationToken token)
     {
         var oldLessons = await LoadScheduleAsync(groupKey, token);
         if (oldLessons is null)
@@ -81,11 +120,11 @@ public class SchedulePersistenceService : ISchedulePersistenceService
         return changed;
     }
 
-    private string GetFilePath(string groupKey)
+    private string GetFilePath(string fileName, bool isHistory = false)
     {
         foreach (var c in Path.GetInvalidFileNameChars())
-            groupKey = groupKey.Replace(c, '_');
+            fileName = fileName.Replace(c, '_');
 
-        return Path.Combine(_dataPath, $"{groupKey}.json");
+        return Path.Combine(isHistory ? _dataHistoryPath : _dataPath, $"{fileName}.json");
     }
 }

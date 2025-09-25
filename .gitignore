@@ -6,7 +6,7 @@ riderModule.iml
 /SguScheduleAPNs.NotificationServer/Secrets
 /SguScheduleAPNs.NotificationServer/Data
 .idea/
-.DS_Store
+*.DS_Store
 *.env
 
 https/
@@ -14,3 +14,4 @@ https/
 *.crt
 *.key
 *.pem
+SguScheduleAPNs.sln.DotSettings.user

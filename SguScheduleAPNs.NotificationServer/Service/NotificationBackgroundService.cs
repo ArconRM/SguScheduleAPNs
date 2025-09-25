@@ -78,13 +78,13 @@ public class NotificationBackgroundService : BackgroundService
                 foreach (var device in group.Value)
                     await apnsService.SendNotificationAsync(
                         "Расписание СГУ",
-                        "Расписание избранной группы поменялось",
+                        "Расписание избранной группы обновилось",
                         device.ApnsToken);
 
                 _logger.LogInformation("Schedule changed for {Group}, notified {Count} devices.",
                     group.Key, group.Value.Count);
 
-                await scheduleService.SaveScheduleAsync(group.Key, parsedLessonsList, token);
+                await scheduleService.SaveScheduleWithArchivingOldVersionAsync(group.Key, parsedLessonsList, token);
             }
             catch (Exception ex)
             {
