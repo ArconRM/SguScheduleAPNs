@@ -50,11 +50,20 @@ public class NotificationBackgroundService : BackgroundService
         var scheduleService = provider.GetRequiredService<ISchedulePersistenceService>();
         var apnsService = provider.GetRequiredService<IApnsService>();
         
-        var devices = await _deviceManagerHttpService.GetAllDevicesAsync(token);
-        var devicesGroupMap = devices
-            .GroupBy(d => $"{d.FavouriteGroupDepartment}/do/{d.FavouriteGroupNumber}")
-            .ToDictionary(g => g.Key, g => g.ToList());
-        
+        Dictionary<string, List<Device>> devicesGroupMap;
+        try
+        {
+            var devices = await _deviceManagerHttpService.GetAllDevicesAsync(token);
+            devicesGroupMap = devices
+                .GroupBy(d => $"{d.FavouriteGroupDepartment}/do/{d.FavouriteGroupNumber}")
+                .ToDictionary(g => g.Key, g => g.ToList());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to fetch device tokens.");
+            return;
+        }
+
         foreach (var group in devicesGroupMap)
         {
             try
