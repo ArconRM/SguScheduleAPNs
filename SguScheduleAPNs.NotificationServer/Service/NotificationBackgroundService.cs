@@ -104,7 +104,13 @@ public class NotificationBackgroundService : BackgroundService
     
     private bool IsBusinessHours()
     {
-        var now = DateTime.Now;
+        var now = GetLocalTime();
         return now.Hour >= 7 && now.Hour < 23;
+    }
+    
+    private DateTime GetLocalTime()
+    {
+        var tz = TimeZoneInfo.FindSystemTimeZoneById("Europe/Saratov");
+        return TimeZoneInfo.ConvertTime(DateTime.UtcNow, tz);
     }
 }
