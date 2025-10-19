@@ -70,6 +70,10 @@ public class NotificationBackgroundService : BackgroundService
             {
                 var parsedLessons = await _parsingHttpService.ParseLessonsInGroupAsync(group.Key, token);
                 var parsedLessonsList = parsedLessons.ToList();
+                if (!parsedLessonsList.Any())
+                {
+                    continue;
+                }
 
                 if (await scheduleService.LoadScheduleAsync(group.Key, token) is null)
                 {
