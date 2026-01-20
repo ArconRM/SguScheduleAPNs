@@ -38,7 +38,7 @@ public class NotificationBackgroundService : BackgroundService
             {
                 await ProcessNotifications(token);
             }
-            
+
             await Task.Delay(TimeSpan.FromMinutes(_random.Next(15, 35)), token);
         }
     }
@@ -49,7 +49,7 @@ public class NotificationBackgroundService : BackgroundService
         var provider = scope.ServiceProvider;
         var scheduleService = provider.GetRequiredService<ISchedulePersistenceService>();
         var apnsService = provider.GetRequiredService<IApnsService>();
-        
+
         Dictionary<string, List<Device>> devicesGroupMap;
         try
         {
@@ -89,10 +89,19 @@ public class NotificationBackgroundService : BackgroundService
                 }
 
                 foreach (var device in group.Value)
-                    await apnsService.SendNotificationAsync(
-                        "Расписание СГУ",
-                        "Расписание избранной группы обновилось",
-                        device.ApnsToken);
+                {
+                    try
+                    {
+                        await apnsService.SendNotificationAsync(
+                            "Расписание СГУ",
+                            "Расписание избранной группы обновилось",
+                            device.ApnsToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Failed to send notification for {Device}", device.ApnsToken);
+                    }
+                }
 
                 _logger.LogInformation("Schedule changed for {Group}, notified {Count} devices.",
                     group.Key, group.Value.Count);
@@ -105,13 +114,13 @@ public class NotificationBackgroundService : BackgroundService
             }
         }
     }
-    
+
     private bool IsBusinessHours()
     {
         var now = GetLocalTime();
         return now.Hour >= 7 && now.Hour < 23;
     }
-    
+
     private DateTime GetLocalTime()
     {
         var tz = TimeZoneInfo.FindSystemTimeZoneById("Europe/Saratov");
