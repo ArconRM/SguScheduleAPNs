@@ -15,4 +15,6 @@ public class Device: IEntity
     public string FavouriteGroupDepartment { get; set; }
 
     public string FavouriteGroupNumber { get; set; }
+
+    public long RegisteredAt { get; set; }
 }

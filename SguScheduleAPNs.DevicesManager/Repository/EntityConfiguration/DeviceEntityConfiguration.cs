@@ -12,5 +12,9 @@ public class DeviceEntityConfiguration: IEntityTypeConfiguration<Device>
         
         builder.Property(lp => lp.Uuid)
             .ValueGeneratedOnAdd();
+        
+        builder.Property(lp => lp.RegisteredAt)
+            .HasDefaultValueSql("(EXTRACT(EPOCH FROM NOW()) * 1000)::bigint");
+        
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SguScheduleAPNs.DevicesManager.Repository;
@@ -11,9 +12,11 @@ using SguScheduleAPNs.DevicesManager.Repository;
 namespace SguScheduleAPNs.DevicesManager.Migrations
 {
     [DbContext(typeof(DevicesManagerDbContext))]
-    partial class DevicesManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260120180329_AddedRegisteredAtField")]
+    partial class AddedRegisteredAtField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
